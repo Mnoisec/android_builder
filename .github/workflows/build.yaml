@@ -6,9 +6,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
+        # 拉取仓库代码
       - name: Checkout the code
         uses: actions/checkout@v3
+        # 设置Java运行环境
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -18,7 +22,8 @@ jobs:
         name: Get project name
         run: echo "::set-output name=PROJECT::$(cat project-to-build)"
       - name: Clone project
-        run: git clone --depth=1 ${{ steps.get-project.outputs.PROJECT }} project
+        # run: git clone --depth=1 ${{ steps.get-project.outputs.PROJECT }} project
+        run: git clone --depth=1 https://github.com/${{ secrets.GH_TOKEN }}@github.com/Mnoisec/getmcclog project
       - name: Build the app
         working-directory: ./project
         run: |

@@ -21,9 +21,15 @@ jobs:
       - id: get-project
         name: Get project name
         run: echo "::set-output name=PROJECT::$(cat project-to-build)"
-      - name: Clone project
+      #- name: Clone project
         # run: git clone --depth=1 ${{ steps.get-project.outputs.PROJECT }} project
-        run: git clone --depth=1 https://github.com/${{ secrets.GH_TOKEN }}@github.com/Mnoisec/getmcclog project
+        #run: git clone --depth=1 https://github.com/${{ secrets.GH_TOKEN }}@github.com/Mnoisec/getmcclog project
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.TOKEN }}
+      - name: Clone project
+        run: git clone --depth=1 git@github.com:Mnoisec/getmcclog.git project
       - name: Build the app
         working-directory: ./project
         run: |
